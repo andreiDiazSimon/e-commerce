@@ -7,9 +7,8 @@ const port = 9999;
 
 app.use(cors());
 app.use(bodyParser.json());
-app.post('/', (req, res) => {
-  console.log('Received data:', req.body);
-  res.send(`NODE.JS server ito TANGINAMO, ang sinend mo ay ${req.body.message}`);
+app.post('/auth', (req, res) => {
+  res.send(req.body);
 });
 
 
