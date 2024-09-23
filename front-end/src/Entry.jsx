@@ -1,40 +1,62 @@
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import axios from 'axios'
+
 import { useRef } from 'react';
-export default function Entry() {
-  const usernameRef = useRef(null);
-  const passwordRef = useRef(null);
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Home from './Home.jsx';
+import axios from 'axios';
 
-  const handleLogin = async () => {
+function Entry() {
+  const usernameRef = useRef();
+  const passwordRef = useRef();
+
+  const handleCreateAccountClick = async () => {
+    const username = usernameRef.current.value;
+    const password = passwordRef.current.value;
     try {
-      const username = usernameRef.current.value;
-      const password = passwordRef.current.value;
-      const response = await axios.post('http://localhost:9999/auth', { username, password });
+      const response = await axios.post('http://localhost:9999/auth/create', { username, password });
 
-      console.log(response.data);
+      if (response.data.mayGantongUsernameNa) {
+        console.log('Username already exists!');
+        alert('Username already exists!')
+      } else if (response.data.nakaGawaNaNewAccount) {
+        console.log('Account created successfully!');
+        alert('Account created successfully!')
+      }
     } catch (error) {
-      console.error('Error logging in:', error);
+      console.error('Error creating account:', error.response?.data || error.message);
     }
   };
 
   return (
     <>
       <div style={{
-        padding: '40px',
-        boxShadow: "0px 0px 20px rgba(139, 139, 139, 0.4)",
-        display: "flex",
+        display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: "20px",
-        borderRadius: '30px'
+        padding: '40px',
+        borderRadius: '20px',
+        boxShadow: '0px 0px 30px rgba(0, 0, 0, 0.2)',
+        gap: '20px',
       }}>
-        <TextField id="filled-basic" label="username" variant="outlined" inputRef={usernameRef} />
-        <TextField id="filled-basic" label="password" variant="outlined" inputRef={passwordRef} />
-        <Button variant="contained" onClick={handleLogin}>Log In</Button>
-      </div >
+        <TextField
+          inputRef={usernameRef}
+          id="outlined-username"
+          label="Username"
+          variant="outlined"
+        />
+        <TextField
+          inputRef={passwordRef}
+          id="outlined-password"
+          label="Password"
+          variant="outlined"
+          type="password"
+        />
+        <Button variant="outlined" onClick={handleCreateAccountClick}>Create Account</Button>
+        <Button variant="outlined">Login</Button>
+      </div>
+      <Home />
     </>
-  )
+  );
 }
+
+export default Entry;
 
