@@ -55,14 +55,14 @@ app.post('/auth/login', (req, res) => {
   connection.query(sql, [username, password], (err, results) => {
     if (err) {
       console.log(err);
-      return res.status(500).send({ error: 'Error logging in' });
+      return res.send({ error: 'Error logging in' });
     }
 
     if (results.length > 0) {
       console.log(results);
-      res.send({ gumana: true }); // Successful login
+      res.send({ gumana: true });
     } else {
-      res.status(401).send({ gumana: false, error: 'Invalid credentials' }); // Invalid credentials
+      res.send({ gumana: false });
     }
   });
 });
