@@ -18,7 +18,7 @@ export default function Home() {
   return (
     <div className="navbar">
       <div className="left-container">
-        <TextField id="outlined-basic" label="search" variant="outlined" />
+        <TextField id="outlined-basic" label="pepe" variant="outlined" />
         <FormControl variant="standard" className="category-select">
           <InputLabel id="demo-simple-select-label">Category</InputLabel>
           <Select
