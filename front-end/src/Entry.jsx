@@ -46,34 +46,35 @@ function Entry() {
 
   return (
     <>
-      {!isLoggedIn ? (
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          padding: '40px',
-          borderRadius: '20px',
-          boxShadow: '0px 0px 30px rgba(0, 0, 0, 0.2)',
-          gap: '20px',
-        }}>
-          <TextField
-            inputRef={usernameRef}
-            id="outlined-username"
-            label="Username"
-            variant="outlined"
-          />
-          <TextField
-            inputRef={passwordRef}
-            id="outlined-password"
-            label="Password"
-            variant="outlined"
-            type="password"
-          />
-          <Button variant="outlined" onClick={handleCreateAccountClick}>Create Account</Button>
-          <Button variant="outlined" onClick={handleLoginClick}>Login</Button>
-        </div>
-      ) : (
-        <Home />
-      )}
+      {/* {!isLoggedIn ? ( */}
+      {/*   <div style={{ */}
+      {/*     display: 'flex', */}
+      {/*     flexDirection: 'column', */}
+      {/*     padding: '40px', */}
+      {/*     borderRadius: '20px', */}
+      {/*     boxShadow: '0px 0px 30px rgba(0, 0, 0, 0.2)', */}
+      {/*     gap: '20px', */}
+      {/*   }}> */}
+      {/*     <TextField */}
+      {/*       inputRef={usernameRef} */}
+      {/*       id="outlined-username" */}
+      {/*       label="Username" */}
+      {/*       variant="outlined" */}
+      {/*     /> */}
+      {/*     <TextField */}
+      {/*       inputRef={passwordRef} */}
+      {/*       id="outlined-password" */}
+      {/*       label="Password" */}
+      {/*       variant="outlined" */}
+      {/*       type="password" */}
+      {/*     /> */}
+      {/*     <Button variant="outlined" onClick={handleCreateAccountClick}>Create Account</Button> */}
+      {/*     <Button variant="outlined" onClick={handleLoginClick}>Login</Button> */}
+      {/*   </div> */}
+      {/* ) : ( */}
+      {/*   <Home /> */}
+      {/* )} */}
+      <Home />
     </>
   );
 }

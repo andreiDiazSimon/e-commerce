@@ -1,0 +1,33 @@
+.navbar {
+  width: 100%;
+  background-color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  /* Adjusted to space out left and right */
+  align-items: center;
+}
+
+.left-container {
+  display: flex;
+  gap: 10px;
+  /* Space between the search and category */
+}
+
+.search-input {
+  width: 200px;
+  /* Average width for the search input */
+}
+
+.category-select {
+  width: 200px;
+  /* Average width for the category select */
+}
+
+.search-button {
+  border-radius: 30px;
+}
+
+.login-button {
+  /* You can add additional styling for the login button if needed */
+}
