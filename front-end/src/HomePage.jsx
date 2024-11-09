@@ -8,7 +8,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import "./styles/entry.css";
 
-export default function Home() {
+export default function HomePage() {
   const [category, setCategory] = useState('');
 
   const handleChange = (event) => {
