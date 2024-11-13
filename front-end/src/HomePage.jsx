@@ -1,43 +1,49 @@
 
-import { useState } from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import "./styles/entry.css";
-
 export default function HomePage() {
-  const [category, setCategory] = useState('');
-
-  const handleChange = (event) => {
-    setCategory(event.target.value);
+  const styles = {
+    navbar: {
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      backgroundColor: 'black',
+      padding: '10px 20px',
+    },
+    logoContainer: {
+      display: 'flex',
+      justifyContent: 'left',
+    },
+    logo: {
+      height: '40px',  // Adjust the size based on your logo
+    },
+    navItems: {
+      display: 'flex',
+      justifyContent: 'space-evenly',
+      width: '40%',  // Adjust this width as needed
+    },
+    navLink: {
+      color: 'white',
+      textDecoration: 'none',
+      fontSize: '16px',
+      padding: '0 10px',
+    },
+    navLinkHover: {
+      color: '#ddd',
+    }
   };
 
   return (
-    <div className="navbar">
-      <div className="left-container">
-        <TextField id="outlined-basic" label="pepe" variant="outlined" />
-        <FormControl variant="standard" className="category-select">
-          <InputLabel id="demo-simple-select-label">Category</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={category}
-            label="Category"
-            onChange={handleChange}
-          >
-            <MenuItem value="healthcare">Healthcare</MenuItem>
-            <MenuItem value="technology">Technology</MenuItem>
-            <MenuItem value="education">Education</MenuItem>
-            <MenuItem value="design">Design</MenuItem>
-            <MenuItem value="marketing">Marketing</MenuItem>
-          </Select>
-        </FormControl>
-        <Button variant="contained" className="search-button">SEARCH</Button>
+    <div style={styles.navbar}>
+      <div style={styles.logoContainer}>
+        <img src="path-to-your-logo.png" alt="Logo" style={styles.logo} />
       </div>
-      <Button variant="contained" className="login-button">Login</Button>
+      <div style={styles.navItems}>
+        <a href="#" style={styles.navLink}>Home</a>
+        <a href="#" style={styles.navLink}>Browse</a>
+        <a href="#" style={styles.navLink}>Profile</a>
+        <a href="#" style={styles.navLink}>Chat</a>
+        <a href="#" style={styles.navLink}>Contact</a>
+      </div>
     </div>
   );
 }
