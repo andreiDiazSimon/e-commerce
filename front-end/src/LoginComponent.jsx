@@ -99,7 +99,7 @@ export function LoginComponent() {
                 flexDirection: 'column',
               }}
             >
-              <h2 style={{ color: 'white', marginBottom: '20px' }}>LOGIN NOW</h2>
+              <h2 style={{ color: 'white', marginBottom: '20px', fontFamily: 'sans-serif', fontWeight: '900'}}>LOGIN NOW</h2>
 
               <input
                 type="email"

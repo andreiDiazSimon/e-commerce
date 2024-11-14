@@ -1,131 +1,173 @@
-import React, { useState } from 'react'; 
+import loginBg from './assets/login-or-signin-bgi.png';
+import logo from './assets/logo.png';
+import Button from '@mui/material/Button';
+import { useState } from 'react';
+import Zeus from './Zeus'; // Import Zeus component
+import HomePage from './HomePage'; // Import HomePage component (or whatever your homepage component is)
 
-export default function Zeus() {
-  const [role, setRole] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+export function LoginComponent() {
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [showHomePage, setShowHomePage] = useState(false); // State to control homepage rendering
+  const [showZeusComponent, setShowZeusComponent] = useState(false); // State to control Zeus component rendering
 
-  const handleRoleChange = (event) => {
-    setRole(event.target.value);
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
   };
 
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
+  const handleRememberMeChange = (e) => {
+    setRememberMe(e.target.checked);
   };
 
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
+  const handleLoginClick = () => {
+    setShowHomePage(true); // When Login button is clicked, show homepage
   };
 
-  const handleNextClick = () => {
-    // You can handle the Next button click here, e.g., form validation or navigation
-    console.log('Proceeding with:', { username, password, role });
-  };
-
-  const handleBackToLogin = () => {
-    // Logic to go back to the login page
-    console.log('Returning to login...');
+  const handleSignInClick = () => {
+    setShowZeusComponent(true); // When Sign In link is clicked, show Zeus component
   };
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.title}>Sign In</h2>
-      <div style={styles.formGroup}>
-        <label htmlFor="username">Username:</label>
-        <input
-          type="text"
-          id="username"
-          value={username}
-          onChange={handleUsernameChange}
-          style={styles.input}
-          required
-        />
-      </div>
-      <div style={styles.formGroup}>
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          value={password}
-          onChange={handlePasswordChange}
-          style={styles.input}
-          required
-        />
-      </div>
-      <div style={styles.formGroup}>
-        <p>Choose your role:</p>
-        <label>
-          <input
-            type="radio"
-            value="Worker"
-            checked={role === 'Worker'}
-            onChange={handleRoleChange}
+    <>
+        <div
+          style={{
+            width: "100%",
+            height: "100vh",
+            backgroundImage: `url(${loginBg})`,
+            backgroundSize: "cover",
+            backgroundPosition: 'center bottom',
+            position: "relative",
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              background: "rgba(128, 128, 128, 0.4)",
+            }}
           />
-          Worker
-        </label>
-        <label>
-          <input
-            type="radio"
-            value="Client"
-            checked={role === 'Client'}
-            onChange={handleRoleChange}
+
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              background: "linear-gradient(140deg, rgba(0, 0, 0, 0) 50%, #b6b6b7 50%)",
+            }}
           />
-          Client
-        </label>
-      </div>
-      <div style={styles.buttonGroup}>
-        <button onClick={handleBackToLogin} style={styles.backButton}>
-          Back to Login
-        </button>
-        <button onClick={handleNextClick} style={styles.nextButton}>
-          Next
-        </button>
-      </div>
-    </div>
+
+          <div
+            style={{
+              zIndex: '999',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginRight: '150px',
+            }}
+          >
+            <div
+              style={{
+                width: '200px',
+                height: '200px',
+                backgroundImage: `url(${logo})`,
+                backgroundSize: 'contain',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                filter: 'drop-shadow(0px 0px 10px rgba(255, 255, 255, 1))',
+              }}
+            ></div>
+
+            <div
+              style={{
+                width: '450px',
+                height: '450px',
+                backgroundColor: '#1b1f2e',
+                borderRadius: '40px',
+                boxShadow: '30px -30px 0px rgba(27, 31, 46,0.5)',
+                padding: '40px',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <h2 style={{ color: 'white', marginBottom: '20px',fontFamily: 'sans-serif', fontWeight: '900' }}>SIGN UP</h2>
+              <input
+                type="text"
+                id="Name"
+                placeholder="Name"
+                style={{
+                  padding: '12px',
+                  backgroundColor: 'white',
+                  borderRadius: '20px',
+                  color: 'black',
+                  fontSize: '16px',
+                  marginBottom: '20px',
+                }}
+              />
+              <input
+                type="Email"
+                id="Email"
+                placeholder="Email"
+                style={{
+                  padding: '12px',
+                  backgroundColor: 'white',
+                  borderRadius: '20px',
+                  color: 'black',
+                  fontSize: '16px',
+                  marginBottom: '20px',
+                }}
+              />
+
+
+              <div style={{ position: 'relative', marginBottom: '20px' }}>
+                <input
+                  type={passwordVisible ? 'text' : 'password'}
+                  id="Password"
+                  placeholder="Password"
+                  style={{
+                    padding: '12px',
+                    backgroundColor: 'white',
+                    borderRadius: '20px',
+                    color: 'black',
+                    fontSize: '16px',
+                    width: '100%',
+                    boxSizing: 'border-box',
+                  }}
+                />
+                <span
+                  onClick={togglePasswordVisibility}
+                  style={{
+                    cursor: 'pointer',
+                    fontSize: '18px',
+                    color: '#ccc',
+                    
+                  }}
+                >
+                  {passwordVisible ? '...hide' : '...unhide'}
+                </span> 
+              </div>
+
+              {/* Login Button */}
+              <Button
+                variant="contained"
+                style={{ marginBottom: '20px' }}
+                onClick={handleLoginClick} // Handle login button click
+              >
+                REGISTER
+              </Button>   
+                </div>
+              </div>
+            </div>  
+    </>
   );
 }
 
-const styles = {
-  container: {
-    maxWidth: '400px',
-    margin: '0 auto',
-    padding: '20px',
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    fontFamily: 'Arial, sans-serif',
-  },
-  title: {
-    fontSize: '1.5rem',
-    marginBottom: '10px',
-  },
-  formGroup: {
-    marginBottom: '15px',
-  },
-  input: {
-    width: '100%',
-    padding: '8px',
-    marginBottom: '10px',
-  },
-  buttonGroup: {
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-  backButton: {
-    padding: '10px 20px',
-    backgroundColor: '#ddd',
-    color: '#333',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-  },
-  nextButton: {
-    padding: '10px 20px',
-    backgroundColor: '#4CAF50',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-  },
-};
- 
+export default LoginComponent;
