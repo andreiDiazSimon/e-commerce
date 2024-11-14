@@ -1,4 +1,5 @@
-import React, { useState } from 'react'; 
+import { useState } from 'react';
+import './style.css'
 
 export default function Zeus() {
   const [role, setRole] = useState('');
@@ -128,4 +129,4 @@ const styles = {
     cursor: 'pointer',
   },
 };
- 
+

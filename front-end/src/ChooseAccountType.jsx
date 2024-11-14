@@ -2,6 +2,8 @@ import workerImg from './assets/worker.png'
 import clientImg from './assets/client.png'
 import loginBg from './assets/login-or-signin-bgi.png';
 import logo from './assets/logo.png';
+import './style.css'
+import './styles/ChooseAccountType.css'
 
 export default function ChooseAccountType() {
   return (
@@ -74,22 +76,31 @@ export default function ChooseAccountType() {
             flexDirection: 'column',
           }}
         >
-          <h2 style={{ color: 'white', }}>SIGN IN</h2>
-          <div style={{ color: 'white' }}>Choose account type</div>
-          <div style={{ display: 'flex' }}>
-            <div><img src={workerImg} alt="" /><div>Worker</div></div>
-            <div><img src={clientImg} alt="" /><div>Client</div></div>
-          </div>
-          <button style={{ width: '150px', }}>
-            Next
-          </button>
+          <h2 style={{ color: 'white', marginBottom: '20px', fontFamily: 'Arial, sans-serif', fontWeight: '900' }}>SIGN IN</h2>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '30px', color: 'white' }}>Choose account type</div>
 
+
+          <div className="card-container">
+            <div className="card">
+              <img src={workerImg} alt="Worker" className="card-image"></img >
+              <div className="card-text">Worker</div>
+            </div>
+
+            <div className="card">
+              <img src={clientImg} alt="Client" className="card-image"></img >
+              <div className="card-text">Client</div>
+            </div>
+          </div>
+
+          <div className="button-container">
+            <button className="next-button">Next</button>
+          </div>
 
 
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
             <div style={{ color: 'white' }}>
               Back to
-              <span style={{ nLeft: '5px', fontWeight: 'bold' }}>
+              <span style={{ marginLeft: '5px', fontWeight: 'bold' }}>
                 <a href="#" style={{ color: 'white', textDecoration: 'underline', cursor: 'pointer' }}>
                   Login
                 </a>
