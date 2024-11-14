@@ -1,18 +1,12 @@
 import LoginComponent from './LoginComponent';
-import {useState} from 'react'
+import { useState } from 'react'
 import Zeus from './Zeus'
+import ChooseAccountType from './ChooseAccountType'
 export default function LogiOrSignin() {
-
-  let [Button, Button2] = useState(false)
-
-let Choice = () => {
-  return Button2(true)
-}
-
   return (
-   <>
- 
-<LoginComponent/>
+    <>
+      {/* <LoginComponent /> */}
+      <ChooseAccountType />
     </>
   );
 }

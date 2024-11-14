@@ -192,7 +192,7 @@ export function LoginComponent() {
       ) : showZeusComponent ? (
         // Render the Zeus component after clicking "Sign In"
         <Zeus />
-      ) : <Zeus/>}
+      ) : <Zeus />}
     </>
   );
 }
