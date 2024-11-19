@@ -3,13 +3,16 @@ import logo from './assets/logo.png';
 import Button from '@mui/material/Button';
 import { useState } from 'react';
 import Zeus from './Zeus'; // Import Zeus component
-import HomePage from './HomePage'; // Import HomePage component (or whatever your homepage component is)
+import ChooseAccountType from './ChooseAccountType'
+import Home from './Home'
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+
 
 export function LoginComponent() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [showHomePage, setShowHomePage] = useState(false); // State to control homepage rendering
-  const [showZeusComponent, setShowZeusComponent] = useState(false); // State to control Zeus component rendering
+  const [showHomePage, setShowHomePage] = useState(false); 
+  const [showZeusComponent, setShowZeusComponent] = useState(false); 
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -20,11 +23,11 @@ export function LoginComponent() {
   };
 
   const handleLoginClick = () => {
-    setShowHomePage(true); // When Login button is clicked, show homepage
+    setShowHomePage(true); 
   };
 
   const handleSignInClick = () => {
-    setShowZeusComponent(true); // When Sign In link is clicked, show Zeus component
+    setShowZeusComponent(true); 
   };
 
   return (
@@ -83,7 +86,7 @@ export function LoginComponent() {
                 backgroundSize: 'contain',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center',
-                filter: 'drop-shadow(0px 0px 10px rgba(255, 255, 255, 1))',
+                
               }}
             ></div>
 
@@ -99,19 +102,20 @@ export function LoginComponent() {
                 flexDirection: 'column',
               }}
             >
-              <h2 style={{ color: 'white', marginBottom: '20px', fontFamily: 'sans-serif', fontWeight: '900'}}>LOGIN NOW</h2>
+              <h2 style={{ color: 'white', marginBottom: '20px', fontFamily: 'Poppins', fontWeight: '900'}}>LOGIN NOW</h2>
 
               <input
-                type="email"
+                type="Email"
                 id="email"
-                placeholder="email"
+                placeholder="Email"
                 style={{
                   padding: '12px',
                   backgroundColor: 'white',
-                  borderRadius: '10px',
+                  borderRadius: '15px',
                   color: 'black',
                   fontSize: '16px',
                   marginBottom: '20px',
+                  boxShadow: '10px 10px 10px rgba(0,0,0,0.3)',
                 }}
               />
 
@@ -119,34 +123,40 @@ export function LoginComponent() {
                 <input
                   type={passwordVisible ? 'text' : 'password'}
                   id="password"
-                  placeholder="password"
+                  placeholder="Password"
                   style={{
                     padding: '12px',
                     backgroundColor: 'white',
-                    borderRadius: '10px',
+                    borderRadius: '15px',
                     color: 'black',
                     fontSize: '16px',
                     width: '100%',
                     boxSizing: 'border-box',
+                    boxShadow: '10px 10px 10px rgba(0,0,0,0.3)',
                   }}
                 />
                 <span
-                  onClick={togglePasswordVisibility}
-                  style={{
-                    cursor: 'pointer',
-                    fontSize: '18px',
-                    color: '#ccc',
-                  }}
-                >
-                  {passwordVisible ? '...hide' : '...unhide'}
-                </span>
+              onClick={togglePasswordVisibility}
+               style={{
+                cursor: 'pointer',
+                fontSize: '18px',
+                color: 'black',
+                position: 'absolute',
+                top: '50%',
+                right: '10px',
+                transform: 'translateY(-39%)',
+                
+               }}
+>
+                {passwordVisible ? <VisibilityOff /> : <Visibility />}
+              </span>
               </div>
 
-              {/* Login Button */}
+            
               <Button
                 variant="contained"
-                style={{ marginBottom: '20px' }}
-                onClick={handleLoginClick} // Handle login button click
+                style={{ marginBottom: '20px', fontFamily:'Poppins', fontWeight:'400'}}
+                onClick={handleLoginClick}
               >
                 Login
               </Button>
@@ -159,25 +169,25 @@ export function LoginComponent() {
                     checked={rememberMe}
                     onChange={handleRememberMeChange}
                   />
-                  <label htmlFor="rememberMe" style={{ color: 'white' }}>
+                  <label htmlFor="rememberMe" style={{ color: 'white',  fontFamily:'Poppins', fontWeight:'500'}}>
                     Remember me
                   </label>
                 </div>
 
                 <div style={{ color: 'white', cursor: 'pointer' }}>
-                  <a href="#" style={{ textDecoration: 'none', color: 'white' }}>
+                  <a href="#" style={{ textDecoration: 'none', color: 'white',  fontFamily:'Poppins', fontWeight:'500'}}>
                     Forgot password?
                   </a>
                 </div>
               </div>
 
               <div style={{ marginTop: '30px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
-                <div style={{ color: 'white', fontSize: '16px' }}>No Account?</div>
+                <div style={{ color: 'white', fontSize: '16px', fontFamily:'Poppins', fontWeight:'500' }}>No Account?</div>
                 <div>
                   <a
                     href="#"
-                    onClick={handleSignInClick} // Handle Sign In link click
-                    style={{ fontWeight: '900', color: 'white', textDecoration: 'none', fontSize: '16px' }}
+                    onClick={handleSignInClick}
+                    style={{ fontWeight: '900', color: 'white', textDecoration: 'none', fontSize: '16px', fontFamily:'Poppins', fontWeight:'bold'  }}
                   >
                     Sign In
                   </a>
@@ -187,10 +197,8 @@ export function LoginComponent() {
           </div>
         </div>
       ) : showHomePage ? (
-        // Render the HomePage component after login
-        <HomePage />
-      ) : showZeusComponent ? (
-        // Render the Zeus component after clicking "Sign In"
+        <Home />
+      ) : showZeusComponent ? ( 
         <Zeus />
       ) : <Zeus />}
     </>

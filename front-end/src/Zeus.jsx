@@ -2,9 +2,11 @@ import loginBg from './assets/login-or-signin-bgi.png';
 import logo from './assets/logo.png';
 import Button from '@mui/material/Button';
 import { useState } from 'react';
-import Zeus from './Zeus'; // Import Zeus component
-import HomePage from './HomePage'; // Import HomePage component (or whatever your homepage component is)
+import LoginComponent from './LoginComponent'
+import ChooseAccountType from './ChooseAccountType'
+
 import './style.css';
+
 
 const styles = {
   container: {
@@ -68,6 +70,7 @@ const styles = {
     color: 'black',
     fontSize: '16px',
     marginBottom: '20px',
+
   },
   passwordToggle: {
     cursor: 'pointer',
@@ -76,11 +79,12 @@ const styles = {
   },
 };
 
-export function LoginComponent() {
+export function Zeus() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [showHomePage, setShowHomePage] = useState(false);
   const [showZeusComponent, setShowZeusComponent] = useState(false);
+  const [backsalogin, setbacksalogin] = useState(false)
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -98,7 +102,10 @@ export function LoginComponent() {
     setShowZeusComponent(true);
   };
 
-  return (
+const handlebacktologin = () => {
+  setbacksalogin(true)
+}
+  return !backsalogin ? (
     <>
       <div style={styles.container}>
         <div style={styles.overlay} />
@@ -106,7 +113,7 @@ export function LoginComponent() {
         <div style={styles.formContainer}>
           <div style={styles.logo}></div>
           <div style={styles.form}>
-            <h2 style={{ color: 'white', marginBottom: '20px', fontFamily: 'sans-serif', fontWeight: '900' }}>
+            <h2 style={{ color: 'white', marginBottom: '20px', fontFamily: 'Poppins', fontWeight: '900' }}>
               SIGN UP
             </h2>
             <input
@@ -122,28 +129,56 @@ export function LoginComponent() {
               style={styles.input}
             />
             <div style={{ position: 'relative', marginBottom: '20px' }}>
-              <input
-                type={passwordVisible ? 'text' : 'password'}
-                id="Password"
-                placeholder="Password"
-                style={styles.input}
+                <input
+                  type={passwordVisible ? 'text' : 'password'}
+                  id="password"
+                  placeholder="Password"
+                  style={{
+                    padding: '12px',
+                    backgroundColor: 'white',
+                    borderRadius: '15px',
+                    color: 'black',
+                    fontSize: '16px',
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    boxShadow: '10px 10px 10px rgba(0,0,0,0.3)',                  
+                  }}
+                />
+                <span
               />
-              <span onClick={togglePasswordVisibility} style={styles.passwordToggle}>
+              <span onClick={togglePasswordVisibility} style={{
+              }}>
                 {passwordVisible ? '...hide' : '...unhide'}
               </span>
             </div>
             <Button
               variant="contained"
-              style={{ marginBottom: '20px' }}
+              style={{ marginBottom: '20px', fontFamily:'Poppins', fontWeight:'500'}}
               onClick={handleLoginClick}
             >
               REGISTER
             </Button>
+
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
+            <div style={{ color: 'white',  fontFamily:'Poppins', fontWeight:'500'}}>
+              Back to
+              <span style={{ marginLeft: '5px', fontWeight: 'bold' }}>
+            
+
+                <a href="#" onClick={handlebacktologin} style={{ color: 'white', textDecoration: 'underline', cursor: 'pointer',  fontFamily:'Poppins', fontWeight:'500'}}>
+                  Login
+                </a>
+              </span>
+            </div>
+          </div>
           </div>
         </div>
       </div>
+      
+
     </>
-  );
+  
+  ) :  <LoginComponent />
 }
 
-export default LoginComponent;
+export default Zeus;

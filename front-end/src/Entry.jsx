@@ -1,4 +1,4 @@
-import HomePage from './HomePage.jsx'
+
 import LoginOrSignin from './LoginOrSignin.jsx'
 function Entry() {
 
@@ -6,7 +6,6 @@ function Entry() {
     <>
 
       <LoginOrSignin />
-      {/* <HomePage /> */}
     </>
   );
 }

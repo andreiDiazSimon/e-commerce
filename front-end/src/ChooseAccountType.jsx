@@ -1,7 +1,7 @@
 import workerImg from './assets/worker.png'
 import clientImg from './assets/client.png'
 import loginBg from './assets/login-or-signin-bgi.png';
-import logo from './assets/logo.png';
+import logo from './assets/logo.png'
 import './style.css'
 import './styles/ChooseAccountType.css'
 
