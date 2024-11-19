@@ -1,58 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 .button-container {
-  margin-bottom: 25px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	margin-bottom: 25px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .next-button {
-  width: 300px;
-  padding: 20px;
-  background: #a4a9b0;
-  border-radius: 40px;
-  font-family: sans-serif;
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s;
-  /* Apply transition to all properties */
+	width: 300px;
+	padding: 20px;
+	background: #63686f;
+	border-radius: 40px;
+	font-family: sans-serif;
+	color: white;
+	border: none;
+	cursor: pointer;
+	transition: all 0.3s;
+	/* Apply transition to all properties */
 }
 
 .next-button:hover {
-  background: #aeaeae;
-  color: black;
+	background: #aeaeae;
+	color: black;
 }
 
 
 
 .card-container {
-  display: flex;
-  justify-content: space-evenly;
-  width: 100%;
-  margin-bottom: 25px;
+	display: flex;
+	gap: 20px;
+	justify-content: space-evenly;
+	width: 100%;
+	margin-bottom: 25px;
 }
 
 .card {
-  border-radius: 40px;
-  padding: 20px;
-  background: #63686f;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+	border-radius: 40px;
+	padding: 20px;
+	background: #63686f;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
 }
 
 .card:hover {
-  background-color: #aeaeae;
-  transition: all 0.3s;
+	background-color: #aeaeae;
+	transition: all 0.3s;
 }
 
 
 .card-image {
-  width: 150px;
-  margin-bottom: 10px;
+	width: 150px;
+	margin-bottom: 10px;
 }
 
 .card-text {
-  color: white;
+	color: white;
 }

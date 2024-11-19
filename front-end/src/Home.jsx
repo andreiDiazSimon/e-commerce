@@ -1,50 +1,35 @@
 import './styles/Home.css'
-import logo from './assets/logo.png';
-import HPbg from './assets/HPbg.jpg';
-export default function Home(){
+import HPbg from './assets/home-page-background-image.png';
 
-    return  <div style={{width:'100%'}}>
-        
-        <div className="main-container">
-    
-   
-   <div style={{
-    display:'flex',
-    justifyContent:'center',
-    alignItems:'center',
-   }}>
- <div className="pogi"></div>
- </div>
-   
-    <div className="content-container">
-      <div className="item">HOME</div>
-      <div className="item">BROWSE</div>
-      <div className="item">PROFILE</div>
-      <div className="item">CHAT</div>
-      <div className="item">CONTACT</div>
-    </div>
-  </div>
-  
+export default function Home() {
+	return (
+		<div className="w-full">
 
+			{/* navbar Container */}
+			<div className="flex justify-evenly items-center bg-gradient-to-r from-[#171717] to-[#444444] w-full">
+				{/* Pogi (Logo) */}
+				<div className="flex justify-center items-center mr-[500px]">
+					<div className="w-[90px] h-[90px] bg-[url('./assets/logo.png')] bg-contain bg-no-repeat bg-center transition-all duration-300 hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]"></div>
+				</div>
 
-<div style={{
-    width:'100%',
-    height:'100vh',
-    backgroundImage: `url(${HPbg})`,
-    backgroundRepeat:'no-repeat',
-    backgroundSize:'cover',
-    backgroundPosition:'center left',
-    filter: "brightness(25%) blur(5px) grayscale(15) ",
-    
+				{/* Content Container (Menu items) */}
+				<div className="flex gap-[90px]">
+					<div className="nav-item">HOME</div>
+					<div className="nav-item">BROWSE</div>
+					<div className="nav-item">PROFILE</div>
+					<div className="nav-item">CHAT</div>
+					<div className="nav-item">CONTACT</div>
+				</div>
+			</div>
 
-
-}}>
-
-</div>
-
-
-        </div>
-
-
-
+			{/* Background Image (HPbg) */}
+			<div
+				className="w-full h-screen bg-cover bg-no-repeat bg-center"
+				style={{
+					backgroundImage: `url(${HPbg})`,
+					filter: "blur(15px)",
+				}}
+			></div>
+		</div>
+	);
 }
