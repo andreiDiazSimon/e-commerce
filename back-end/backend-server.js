@@ -1,73 +1,95 @@
-
-const mysql = require('mysql2');
+// server.js (Node.js Express Server)
 const express = require('express');
-const cors = require('cors');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+
+const { PrismaClient } = require('@prisma/client')
+const prisma = new PrismaClient()
+
 const app = express();
+
 const port = 9999;
+
+app.use(bodyParser.json());
 app.use(cors());
-app.use(bodyParser.json());
 
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  database: 'test',
-  port: 3306,
-  password: 'password',
+// model users {
+//   user_id       Int    @id @default(autoincrement())
+//   user_type     String
+//   user_name     String
+//   user_email    String @unique
+//   user_password String
+// }
+
+app.post('/create-account', async (req, res) => {
+	const { chosenUserType, Name, Email, password } = req.body;
+
+	console.log('Account to Create:', req.body);
+
+	try {
+		await prisma.users.create({
+			data: {
+				user_type: chosenUserType,
+				user_name: Name,
+				user_email: Email,
+				user_password: password,
+			},
+		});
+
+		res.status(200).json({ message: 'Account created successfully' });
+	} catch (e) {
+		if (e.code === 'P2002' && e.meta.target === 'users_user_email_key') {
+			console.error('Duplicate email error:');
+			res.status(400).json({
+				message: 'The email address is already registered. Please use a different email.',
+			});
+		} else {
+			console.error('Error creating user:', e);
+			res.status(500).json({
+				message: 'An error occurred while creating the account.',
+				error: e.message,
+			});
+		}
+	}
 });
 
-connection.addListener('error', (err) => {
-  console.log(err);
+
+
+app.get('/login', async (req, res) => {
+	try {
+		console.log('Received credentials from login: ', req.query, '\n');
+
+		const user = await prisma.users.findUnique({
+			where: {
+				user_email: req.query.email,
+			},
+		});
+
+		console.log('Return value of Prisma for querying the unique email column: ', user);
+
+		if (!user) {
+			console.log('user not found in the prisma query')
+			return res.status(404).send('Account does not exists');
+		}
+
+		if (req.query.password === user.user_password) {
+			console.log('user found and password match: ', 'req.query ', req.query.email, ' and ', 'prisma ', user.user_email)
+			return res.status(200).send(true);
+		} else {
+			console.log('user found but password not match: ', 'req.query ', req.query.password, ' and ', 'prisma ', user.user_email)
+			return res.status(401).send('incorrect password');
+		}
+	} catch (error) {
+		console.error('Error during login:', error);
+		res.status(500).send('An error occurred during login');
+	}
 });
 
-app.use(bodyParser.json());
 
-app.post('/auth/create', (req, res) => {
-  const { username, password } = req.body;
 
-  const checkSql = `SELECT * FROM users WHERE username = ?`;
-  connection.query(checkSql, [username], (err, results) => {
-    if (err) {
-      console.log(err);
-      return res.send({ error: 'may error gago' });
-    }
 
-    if (results.length > 0) {
-      return res.send({ mayGantongUsernameNa: true });
-    }
 
-    const sql = `INSERT INTO users (username, password) VALUES (?, ?)`;
-    connection.query(sql, [username, password], (err, result) => {
-      if (err) {
-        console.log(err);
-        return res.send({ error: 'error pag gawa account gago' });
-      }
-      console.log(result);
-      res.send({ nakaGawaNaNewAccount: true });
-    });
-  });
-});
-
-app.post('/auth/login', (req, res) => {
-  const { username, password } = req.body;
-  const sql = `SELECT * FROM users WHERE username = ? AND password = ?`;
-
-  connection.query(sql, [username, password], (err, results) => {
-    if (err) {
-      console.log(err);
-      return res.send({ error: 'Error logging in' });
-    }
-
-    if (results.length > 0) {
-      console.log(results);
-      res.send({ gumana: true });
-    } else {
-      res.send({ gumana: false });
-    }
-  });
-});
 
 app.listen(port, () => {
-  console.log(`Node.js is running on http://localhost:${port}`);
+	console.log(`Server running on port ${port}\n`);
 });
-

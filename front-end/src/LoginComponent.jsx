@@ -1,16 +1,21 @@
 import loginBg from './assets/login-or-signin-bgi.png';
 import logo from './assets/logo.png';
 import Button from '@mui/material/Button';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ChooseAccountType from './ChooseAccountType'
 import Home from './Home'
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import axios from 'axios'
 
 export function LoginComponent() {
 	const [passwordVisible, setPasswordVisible] = useState(false);
 	const [rememberMe, setRememberMe] = useState(false);
 	const [showHomePage, setShowHomePage] = useState(false);
 	const [showChooseAccountTypeComponent, setShowChooseAccountTypeComponent] = useState(false);
+	const [credentials, setCredentials] = useState({
+		email: '',
+		password: ''
+	})
 
 	const togglePasswordVisibility = () => {
 		setPasswordVisible(!passwordVisible);
@@ -20,13 +25,44 @@ export function LoginComponent() {
 		setRememberMe(e.target.checked);
 	};
 
-	const handleLoginClick = () => {
-		setShowHomePage(true);
+
+	const handleInputChange = (e) => {
+		setCredentials((current) => ({
+			...current,
+			[e.target.id]: e.target.value, // Dynamically update based on input id
+		}));
+	};
+
+	const handleLoginClick = async () => {
+		if (!credentials.email || !credentials.password) {
+			alert('Please fill in both fields.');
+			return;
+		}
+		try {
+			const response = await axios.get('http://localhost:9999/login', {
+				params: credentials,
+			});
+			if (response.status === 200) {
+				console.log(response);
+				setShowHomePage(true)
+			}
+		} catch (error) {
+			console.error('Login error ko:', error);
+			alert(error.response?.data || 'An error occurred during login.');
+		}
 	};
 
 	const handleSignInClick = () => {
 		setShowChooseAccountTypeComponent(true);
 	};
+
+
+
+	// FOR TESTING
+	useEffect(() => {
+		console.log(credentials)
+	})
+
 
 	return (
 		<>
@@ -77,6 +113,7 @@ export function LoginComponent() {
 								id="email"
 								placeholder="Email"
 								className="p-3 bg-white rounded-[15px] text-black text-sm mb-5 box-shadow-[10px_10px_10px_rgba(0,0,0,0.3)]"
+								onChange={handleInputChange}
 							/>
 
 							<div className="relative mb-5">
@@ -85,6 +122,8 @@ export function LoginComponent() {
 									id="password"
 									placeholder="Password"
 									className="p-3 bg-white rounded-[15px] text-black text-sm w-full box-sizing[border-box] shadow-[10px_10px_10px_rgba(0,0,0,0.3)]"
+
+									onChange={handleInputChange}
 								/>
 								<span
 									onClick={togglePasswordVisibility}
