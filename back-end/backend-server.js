@@ -74,7 +74,10 @@ app.get('/login', async (req, res) => {
 
 		if (req.query.password === user.user_password) {
 			console.log('user found and password match: ', 'req.query ', req.query.email, ' and ', 'prisma ', user.user_email)
-			return res.status(200).send(true);
+			return res.status(200).send({
+				accountType: user.user_type,
+				name: user.user_name,
+			});
 		} else {
 			console.log('user found but password not match: ', 'req.query ', req.query.password, ' and ', 'prisma ', user.user_email)
 			return res.status(401).send('incorrect password');
