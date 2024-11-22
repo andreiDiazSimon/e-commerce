@@ -12,10 +12,20 @@ datasource db {
 
 
 model users {
-  user_id       Int    @id @default(autoincrement())
+  user_id       Int      @id @default(autoincrement())
   user_type     String
   user_name     String
-  user_email    String @unique
+  user_email    String   @unique
   user_password String
+  phone_number  String?  // Nullable field
+  dob           DateTime? // Nullable field for date of birth
+  address       String?  // Nullable field for home address
+  gender        Gender?  // Nullable enum field for gender
 }
 
+// Enum for gender options
+enum Gender {
+  Male
+  Female
+  Other
+}

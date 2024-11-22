@@ -10,7 +10,6 @@ import axios from 'axios';
 import './style.css';
 
 export function Zeus({ chosenUserType }) {
-
 	const [passwordVisible, setPasswordVisible] = useState(false);
 	const [showThis, setShowThis] = useState('zeus');
 
@@ -41,13 +40,12 @@ export function Zeus({ chosenUserType }) {
 			return;
 		}
 
-		const formattedMessage = `
-        Register Account?\n
+		const formattedMessage = `Register Account?\n
         Account Type: ${formData.chosenUserType}
-        Name: ${formData.Name}
-        Email: ${formData.Email}
-        Password: ${formData.password}
-    `;
+		Name: ${formData.Name}
+		Email: ${formData.Email}
+		Password: ${formData.password}`
+			;
 		alert(formattedMessage);
 
 
@@ -122,7 +120,7 @@ export function Zeus({ chosenUserType }) {
 							onChange={handleInputChange}
 
 						/>
-						<div className="relative mb-5">
+						<div className="relative mb-3">
 							<input
 								type={passwordVisible ? 'text' : 'password'}
 								id="password"
@@ -137,15 +135,16 @@ export function Zeus({ chosenUserType }) {
 								{passwordVisible ? <VisibilityOff /> : <Visibility />}
 							</span>
 						</div>
+
 						<Button
 							variant="contained"
-							className="mb-5 font-poppins font-medium"
+							className="font-poppins font-bold "
 							onClick={handleSignInClick}
 						>
 							REGISTER
 						</Button>
 						<div className="flex justify-center items-center">
-							<div className="text-white font-poppins font-medium mt-[30px]">
+							<div className="text-white font-poppins font-medium mt-[10px]">
 								Back to
 								<span className="ml-1 font-bold">
 									<a

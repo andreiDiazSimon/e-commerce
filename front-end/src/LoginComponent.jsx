@@ -17,11 +17,11 @@ export function LoginComponent() {
 	const [rememberMe, setRememberMe] = useState(false);
 	const [showHomePage, setShowHomePage] = useState(false);
 	const [showChooseAccountTypeComponent, setShowChooseAccountTypeComponent] = useState(false);
+	let [fromLoginResponse, setFromLoginResponse] = useState()
 	const [credentials, setCredentials] = useState({
 		email: '',
 		password: ''
 	})
-	let [fromLoginResponse, setFromLoginResponse] = useState()
 
 
 
@@ -52,7 +52,7 @@ export function LoginComponent() {
 			});
 			if (response.status === 200) {
 				console.log('log from LoginComponent: ', response);
-				setFromLoginResponse({ userType: response.data.accountType, userName: response.data.name })
+				setFromLoginResponse({ userType: response.data.accountType, userName: response.data.name, userEmail: response.data.email })
 				console.log('log from response: ', fromLoginResponse);
 				setShowHomePage(true)
 			}
@@ -70,7 +70,7 @@ export function LoginComponent() {
 
 	// FOR TESTING
 	useEffect(() => {
-		console.log('log from useEffect: ', credentials)
+		console.log('log from useEffect in LoginComponent, log lang ito sa input text onChange: ', credentials)
 	}, [credentials])
 
 
