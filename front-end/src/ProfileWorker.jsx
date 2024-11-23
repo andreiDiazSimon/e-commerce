@@ -74,11 +74,73 @@ const ProfileWorker = () => {
 		fetchProfileDetails();
 	}, [])
 
+
+	let [stateSolelyForProfilePhoto, setStateSolelyForProfilePhoto] = useState(contextDataResponseFromLogin.profilePhoto)
+	let [selectedPhotoForChangeProfilePhoto, setSelectedPhotoForChangeProfilePhoto] = useState(null)
+	let handleChangeSelectFile = (e) => {
+		setSelectedPhotoForChangeProfilePhoto(e.target.files[0])
+	}
+
+	let handleSelectFileClick = async () => {
+		document.getElementById('ChangePhoto').click();
+	};
+
+	let handleFileUpload = async () => {
+		let formData = new FormData();
+		formData.append('email', contextDataResponseFromLogin.userEmail);
+		formData.append('file', selectedPhotoForChangeProfilePhoto);
+		try {
+			let response = await axios.put('http://localhost:9999/api/update_profile_photo', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			});
+			setSelectedPhotoForChangeProfilePhoto(null)
+			setStateSolelyForProfilePhoto(response.data.profile_photo)
+			console.log('Response:', response.data);
+		} catch (error) {
+			console.error('Error uploading photo:', error);
+		}
+	}
+	useEffect(() => {
+		console.log(selectedPhotoForChangeProfilePhoto)
+	})
+
+
 	return (
 		<div className="profile-container flex w-full h-screen ">
+			<input onChange={handleChangeSelectFile} type="file" name="file" id="ChangePhoto" className='hidden' />
 			<div className="w-full bg-[#16202c] p-[30px]">{/*BACKGROUND NA BLUEEEEE*/}
-				<div className='leading-[0.9] text-[#b8b7b8] text-[100px] font-sans mb-[20px] font-black text-center'>{contextDataResponseFromLogin.userName}</div>
-				<div className=' text-[#b8b7b8] text-[20px] font-mono font-thin italic tracking-[10px] mb-[20px] text-center'>{contextDataResponseFromLogin.userType}</div>
+				<div className='flex justify-center align-center gap-[30px] mb-[30px]'>
+					<div>
+						<img
+							className="rounded-[50%] w-[200px] h-[200px] object-cover object-center"
+							src={stateSolelyForProfilePhoto}
+							alt="alternate"
+						/>
+						{
+							selectedPhotoForChangeProfilePhoto == null ? (
+								<div
+									className='transition-all text-[#b8b7b8] cursor-pointer mt-[10px] text-center italic font-mono hover:text-[white]'
+									onClick={handleSelectFileClick}
+								>
+									Change Photo
+								</div>
+							) : (
+								<div
+									className='transition-all text-[#b8b7b8] cursor-pointer mt-[10px] text-center italic font-mono hover:text-[white]'
+									onClick={handleFileUpload}
+								>
+									Upload Photo?
+								</div>
+							)
+						}
+					</div>
+					<div className='flex flex-col justify-center align-center'>
+						<div className='leading-[0.9] text-[#b8b7b8] text-[50px] font-sans mb-[20px] font-black text-center'>{contextDataResponseFromLogin.userName}</div>
+						<div className=' text-[#b8b7b8] text-[15px] font-mono font-thin italic tracking-[10px] mb-[20px] text-center'>{contextDataResponseFromLogin.userType}</div>
+					</div>
+				</div>
 
 				<div className="p-[30px] w-full bg-[#b8b7b8] rounded-[50px] ">
 					<div className='text-[1.3em] text-[#16202c]'>Email: <span className='font-black text-[1.2em] italic'>{contextDataResponseFromLogin.userEmail}</span></div>

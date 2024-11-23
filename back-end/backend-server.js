@@ -1,7 +1,10 @@
 // server.js (Node.js Express Server)
 const express = require('express');
-const bodyParser = require('body-parser');
 const cors = require('cors');
+const multer = require("multer");
+const fs = require("fs");
+const path = require('path');
+
 
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
@@ -10,7 +13,7 @@ const app = express();
 
 const port = 9999;
 
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(cors());
 
 // model users {
@@ -21,10 +24,31 @@ app.use(cors());
 //   user_password String
 // }
 
-app.post('/create-account', async (req, res) => {
-	const { chosenUserType, Name, Email, password } = req.body;
 
-	console.log('Account to Create:', req.body);
+
+//create uploads dir kung wala
+const uploadDir = "./uploads";
+if (!fs.existsSync(uploadDir)) {
+	fs.mkdirSync(uploadDir);
+}
+
+
+let upload = multer({
+	storage: multer.diskStorage({
+		destination: function(req, file, cb) {
+			cb(null, './uploads')
+		},
+		filename: function(req, file, cb) {
+			cb(null, `${Date.now()}_${file.originalname}`); // Unique file name
+		}
+	})
+})
+
+
+app.post('/create-account', upload.single('file'), async (req, res) => {
+	const { chosenUserType, Name, Email, password } = req.body;
+	console.log('request file: ', req.file)
+	console.log('request body: ', req.body);
 
 	try {
 		await prisma.users.create({
@@ -33,19 +57,19 @@ app.post('/create-account', async (req, res) => {
 				user_name: Name,
 				user_email: Email,
 				user_password: password,
+				user_profile_photo_path: req.file.filename
 			},
 		});
-
-		res.status(200).json({ message: 'Account created successfully' });
+		res.status(200).send({ message: 'Account created successfully' });
 	} catch (e) {
 		if (e.code === 'P2002' && e.meta.target === 'users_user_email_key') {
 			console.error('Duplicate email error:');
-			res.status(400).json({
+			res.status(400).send({
 				message: 'The email address is already registered. Please use a different email.',
 			});
 		} else {
 			console.error('Error creating user:', e);
-			res.status(500).json({
+			res.status(500).send({
 				message: 'An error occurred while creating the account.',
 				error: e.message,
 			});
@@ -53,7 +77,7 @@ app.post('/create-account', async (req, res) => {
 	}
 });
 
-
+app.use('/photos', express.static('uploads'));
 
 app.get('/login', async (req, res) => {
 	try {
@@ -74,10 +98,19 @@ app.get('/login', async (req, res) => {
 
 		if (req.query.password === user.user_password) {
 			console.log('user found and password match: ', 'req.query ', req.query.email, ' and ', 'prisma ', user.user_email)
+
+
+			// Construct URL for the profile photo
+			const profilePhotoUrl = user.user_profile_photo_path
+				? `http://localhost:9999/photos/${user.user_profile_photo_path}`
+				: `http://localhost:9999/photos/default.jpg`;
+
+			console.log(profilePhotoUrl)
 			return res.status(200).send({
 				accountType: user.user_type,
 				name: user.user_name,
-				email: user.user_email
+				email: user.user_email,
+				profilePhoto: profilePhotoUrl
 			});
 		} else {
 			console.log('user found but password not match: ', 'req.query ', req.query.password, ' and ', 'prisma ', user.user_email)
@@ -95,7 +128,6 @@ app.get('/login', async (req, res) => {
 
 
 
-// PUT /api/update-profile
 app.put('/api/update-profile', async (req, res) => {
 	const { email, gender, phoneNumber, dob, address } = req.body;
 
@@ -105,22 +137,23 @@ app.put('/api/update-profile', async (req, res) => {
 
 	try {
 		const updatedUser = await prisma.users.update({
-			where: { user_email: email },
+			where: {
+				user_email: email,
+			},
 			data: {
-				gender: gender || undefined, // Only update if provided
+				gender: gender || undefined,
 				phone_number: phoneNumber || undefined,
-				dob: dob ? new Date(dob) : undefined, // Convert to Date if provided
+				dob: dob ? new Date(dob) : undefined,
 				address: address || undefined,
 			},
 		});
-		console.log('profile details upadated!: ', updatedUser)
+
 		res.status(200).json({
 			message: 'Profile updated successfully.',
-			updatedUser, // Return updated user details for confirmation
+			updatedUser,
 		});
 	} catch (error) {
 		if (error.code === 'P2025') {
-			// Handle case when no user is found
 			return res.status(404).json({ message: 'User not found.' });
 		}
 		console.error('Error updating profile:', error);
@@ -128,41 +161,13 @@ app.put('/api/update-profile', async (req, res) => {
 	}
 });
 
-
-
-// Updated backend route for updating profile details
-app.put('/api/update-profile', async (req, res) => {
-	const { email, gender, phoneNumber, dob, address } = req.body;
-
-	try {
-		// Find the user by email and update their profile
-		const updatedUser = await prisma.users.update({
-			where: {
-				user_email: email, // Use email from the request body
-			},
-			data: {
-				gender,
-				phone_number: phoneNumber,
-				dob: new Date(dob), // Make sure to format date properly
-				address,
-			},
-		});
-
-		res.status(200).json({ updatedUser }); // Send the updated user back in the response
-	} catch (error) {
-		console.error('Error updating profile:', error);
-		res.status(500).send({ message: 'Error updating profile details' });
-	}
-});
-
-// Backend route for getting profile details
 app.get('/api/get_profile_details', async (req, res) => {
 	try {
-		const { userEmail } = req.query; // Get email from query params
+		const { userEmail } = req.query;
 
 		const profile_details = await prisma.users.findUnique({
 			where: {
-				user_email: userEmail, // Use userEmail from the query string
+				user_email: userEmail,
 			},
 		});
 
@@ -183,6 +188,53 @@ app.get('/api/get_profile_details', async (req, res) => {
 		res.status(500).send({ message: 'Error fetching profile details' });
 	}
 });
+
+
+let update = multer({
+	storage: multer.diskStorage({
+		destination: function(req, file, cb) {
+			cb(null, './uploads');
+		},
+		filename: function(req, file, cb) {
+			cb(null, `${Date.now()}_${file.originalname}`);
+		}
+	})
+});
+
+app.put('/api/update_profile_photo', update.single('file'), async (req, res) => {
+	let { email } = req.body
+	if (!req.file) {
+		return res.status(400).send({ message: 'No file uploaded' });
+	}
+	try {
+		const updatePhotoOfUser = await prisma.users.update({
+			where: {
+				user_email: email,
+			},
+			data: {
+				user_profile_photo_path: req.file.filename,
+			},
+		})
+		// Construct URL for the profile photo
+		const profilePhotoUrl = updatePhotoOfUser.user_profile_photo_path ? `http://localhost:9999/photos/${updatePhotoOfUser.user_profile_photo_path}`
+			: `http://localhost:9999/photos/default.jpg`;
+
+		console.log(req.body)
+		console.log(req.file);
+		console.log(updatePhotoOfUser)
+		res.status(200).send({
+			profile_photo: profilePhotoUrl
+		})
+	} catch (e) {
+		console.log(e)
+	}
+});
+
+
+
+
+
+
 
 
 app.listen(port, () => {

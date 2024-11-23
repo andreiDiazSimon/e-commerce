@@ -21,6 +21,7 @@ export function Zeus({ chosenUserType }) {
 	});
 
 
+	//TODO! ("PUT selectedFile state here")
 	const handleInputChange = (e) => {
 		const { id, value } = e.target;
 		setFormData((prevState) => ({
@@ -39,18 +40,34 @@ export function Zeus({ chosenUserType }) {
 			alert('Please fill in all the fields!');
 			return;
 		}
+		if (!selectedFile) {
+			alert('Please select Profile Photo')
+			return
+		}
 
-		const formattedMessage = `Register Account?\n
-        Account Type: ${formData.chosenUserType}
+
+		alert(`Register Account?\n
+        	Account Type: ${formData.chosenUserType}
 		Name: ${formData.Name}
 		Email: ${formData.Email}
-		Password: ${formData.password}`
-			;
-		alert(formattedMessage);
+		Password: ${formData.password}
+		Profile Photo: ${selectedFile.name}`);
 
 
 		try {
-			const response = await axios.post('http://localhost:9999/create-account', formData);
+			console.log("log formData: ", formData)
+			let ewan = new FormData()
+			ewan.append('chosenUserType', formData.chosenUserType)
+			ewan.append('Email', formData.Email)
+			ewan.append('Name', formData.Name)
+			ewan.append('password', formData.password)
+			ewan.append('file', selectedFile)
+			console.log("eto yung lahat lahat na: ", ewan)
+			const response = await axios.post('http://localhost:9999/create-account', ewan, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				}
+			});
 
 			if (response.status === 200) {
 				console.log(response)
@@ -71,11 +88,24 @@ export function Zeus({ chosenUserType }) {
 	// FOR TESTING
 	useEffect(() => {
 		console.log(formData)
+		console.log(selectedFile)
 	})
 
 
+	let [selectedFile, setSelectedFile] = useState(null)
+	let handleFileChange = (event) => {
+		let ito = event.target.files[0]
+		console.log('log from the initial select file: ', ito)
+		setSelectedFile(ito)
+	}
+
+	let handleSelectInputFile = () => {
+		document.getElementById('inputFile').click()
+	}
+
 	return showThis === 'zeus' ? (
 		<>
+
 			<div
 				className="w-full h-screen flex justify-end items-center relative"
 				style={{
@@ -135,6 +165,11 @@ export function Zeus({ chosenUserType }) {
 								{passwordVisible ? <VisibilityOff /> : <Visibility />}
 							</span>
 						</div>
+						<input onChange={handleFileChange} className='hidden' type="file" id="inputFile" />
+
+						{selectedFile != null ? (<button onClick={handleSelectInputFile} className='rounded-[20px] p-[10px] font-black bg-[white] text-[black] mb-[20px] outline transition-all ease-out hover:outline hover:outline-[3px] hover:outline-[white] hover:bg-[#1b1f2e] hover:text-[white]'>{selectedFile.name} | {selectedFile.type}</button>
+						) : (<button onClick={handleSelectInputFile} className='bg-[white] text-[black] mb-[20px] mt-[10px] p-[10px] rounded-[20px] outline transition-all ease-out hover:outline hover:outline-[3px] hover:outline-[white] hover:bg-[#1b1f2e] hover:text-[white]'>Select Profile Photo</button>
+						)}
 
 						<Button
 							variant="contained"

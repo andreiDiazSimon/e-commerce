@@ -14,6 +14,11 @@ const HomeUiWorker = () => {
 			}}
 		>
 			<div className='ml-[3rem] p-[2em] mb-[3rem] bg-[#0000006b] w-[40%] flex flex-col justify-center items-center gap-[1rem] '>
+				<img
+					className="rounded-[50%] w-[150px] h-[150px] object-cover object-center"
+					src={contextDataResponseFromLogin.profilePhoto}
+					alt="alternate"
+				/>
 				<div className="font-sans text-[3em] font-bold text-center">
 					Hi {contextDataResponseFromLogin.userName}, show your skills and shine!
 				</div>

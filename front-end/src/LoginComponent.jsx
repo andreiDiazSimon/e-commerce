@@ -7,6 +7,7 @@ import ChooseAccountType from './ChooseAccountType'
 import Home from './Home'
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios'
+import { withEmotionCache } from '@emotion/react';
 
 
 
@@ -51,8 +52,8 @@ export function LoginComponent() {
 				params: credentials,
 			});
 			if (response.status === 200) {
-				console.log('log from LoginComponent: ', response);
-				setFromLoginResponse({ userType: response.data.accountType, userName: response.data.name, userEmail: response.data.email })
+				console.log('log from LoginComponent: ', response.data);
+				setFromLoginResponse({ profilePhoto: response.data.profilePhoto, userType: response.data.accountType, userName: response.data.name, userEmail: response.data.email })
 				console.log('log from response: ', fromLoginResponse);
 				setShowHomePage(true)
 			}
@@ -69,9 +70,11 @@ export function LoginComponent() {
 
 
 	// FOR TESTING
-	useEffect(() => {
-		console.log('log from useEffect in LoginComponent, log lang ito sa input text onChange: ', credentials)
-	}, [credentials])
+	// useEffect(() => {
+	// 	console.log('log from useEffect in LoginComponent, log lang ito sa input text onChange: ', credentials)
+	// }, [credentials])
+
+
 
 
 	return (
