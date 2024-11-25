@@ -1,73 +1,242 @@
-
-const mysql = require('mysql2');
+// server.js (Node.js Express Server)
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
+const multer = require("multer");
+const fs = require("fs");
+const path = require('path');
+
+
+const { PrismaClient } = require('@prisma/client')
+const prisma = new PrismaClient()
+
 const app = express();
+
 const port = 9999;
+
+app.use(express.json());
 app.use(cors());
-app.use(bodyParser.json());
 
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  database: 'test',
-  port: 3306,
-  password: 'password',
+// model users {
+//   user_id       Int    @id @default(autoincrement())
+//   user_type     String
+//   user_name     String
+//   user_email    String @unique
+//   user_password String
+// }
+
+
+
+//create uploads dir kung wala
+const uploadDir = "./uploads";
+if (!fs.existsSync(uploadDir)) {
+	fs.mkdirSync(uploadDir);
+}
+
+
+let upload = multer({
+	storage: multer.diskStorage({
+		destination: function(req, file, cb) {
+			cb(null, './uploads')
+		},
+		filename: function(req, file, cb) {
+			cb(null, `${Date.now()}_${file.originalname}`); // Unique file name
+		}
+	})
+})
+
+
+app.post('/create-account', upload.single('file'), async (req, res) => {
+	const { chosenUserType, Name, Email, password } = req.body;
+	console.log('request file: ', req.file)
+	console.log('request body: ', req.body);
+
+	try {
+		await prisma.users.create({
+			data: {
+				user_type: chosenUserType,
+				user_name: Name,
+				user_email: Email,
+				user_password: password,
+				user_profile_photo_path: req.file.filename
+			},
+		});
+		res.status(200).send({ message: 'Account created successfully' });
+	} catch (e) {
+		if (e.code === 'P2002' && e.meta.target === 'users_user_email_key') {
+			console.error('Duplicate email error:');
+			res.status(400).send({
+				message: 'The email address is already registered. Please use a different email.',
+			});
+		} else {
+			console.error('Error creating user:', e);
+			res.status(500).send({
+				message: 'An error occurred while creating the account.',
+				error: e.message,
+			});
+		}
+	}
 });
 
-connection.addListener('error', (err) => {
-  console.log(err);
+app.use('/photos', express.static('uploads'));
+
+app.get('/login', async (req, res) => {
+	try {
+		console.log('Received credentials from login: ', req.query, '\n');
+
+		const user = await prisma.users.findUnique({
+			where: {
+				user_email: req.query.email,
+			},
+		});
+
+		console.log('Return value of Prisma for querying the unique email column: ', user);
+
+		if (!user) {
+			console.log('user not found in the prisma query')
+			return res.status(404).send('Account does not exists');
+		}
+
+		if (req.query.password === user.user_password) {
+			console.log('user found and password match: ', 'req.query ', req.query.email, ' and ', 'prisma ', user.user_email)
+
+
+			// Construct URL for the profile photo
+			const profilePhotoUrl = user.user_profile_photo_path
+				? `http://localhost:9999/photos/${user.user_profile_photo_path}`
+				: `http://localhost:9999/photos/default.jpg`;
+
+			console.log(profilePhotoUrl)
+			return res.status(200).send({
+				accountType: user.user_type,
+				name: user.user_name,
+				email: user.user_email,
+				profilePhoto: profilePhotoUrl
+			});
+		} else {
+			console.log('user found but password not match: ', 'req.query ', req.query.password, ' and ', 'prisma ', user.user_email)
+			return res.status(401).send('incorrect password');
+		}
+	} catch (error) {
+		console.error('Error during login:', error);
+		res.status(500).send('An error occurred during login');
+	}
 });
 
-app.use(bodyParser.json());
 
-app.post('/auth/create', (req, res) => {
-  const { username, password } = req.body;
 
-  const checkSql = `SELECT * FROM users WHERE username = ?`;
-  connection.query(checkSql, [username], (err, results) => {
-    if (err) {
-      console.log(err);
-      return res.send({ error: 'may error gago' });
-    }
 
-    if (results.length > 0) {
-      return res.send({ mayGantongUsernameNa: true });
-    }
 
-    const sql = `INSERT INTO users (username, password) VALUES (?, ?)`;
-    connection.query(sql, [username, password], (err, result) => {
-      if (err) {
-        console.log(err);
-        return res.send({ error: 'error pag gawa account gago' });
-      }
-      console.log(result);
-      res.send({ nakaGawaNaNewAccount: true });
-    });
-  });
+
+
+app.put('/api/update-profile', async (req, res) => {
+	const { email, gender, phoneNumber, dob, address } = req.body;
+
+	if (!email) {
+		return res.status(400).json({ message: 'Email is required to update the profile.' });
+	}
+
+	try {
+		const updatedUser = await prisma.users.update({
+			where: {
+				user_email: email,
+			},
+			data: {
+				gender: gender || undefined,
+				phone_number: phoneNumber || undefined,
+				dob: dob ? new Date(dob) : undefined,
+				address: address || undefined,
+			},
+		});
+
+		res.status(200).json({
+			message: 'Profile updated successfully.',
+			updatedUser,
+		});
+	} catch (error) {
+		if (error.code === 'P2025') {
+			return res.status(404).json({ message: 'User not found.' });
+		}
+		console.error('Error updating profile:', error);
+		res.status(500).json({ message: 'An error occurred while updating the profile.' });
+	}
 });
 
-app.post('/auth/login', (req, res) => {
-  const { username, password } = req.body;
-  const sql = `SELECT * FROM users WHERE username = ? AND password = ?`;
+app.get('/api/get_profile_details', async (req, res) => {
+	try {
+		const { userEmail } = req.query;
 
-  connection.query(sql, [username, password], (err, results) => {
-    if (err) {
-      console.log(err);
-      return res.send({ error: 'Error logging in' });
-    }
+		const profile_details = await prisma.users.findUnique({
+			where: {
+				user_email: userEmail,
+			},
+		});
 
-    if (results.length > 0) {
-      console.log(results);
-      res.send({ gumana: true });
-    } else {
-      res.send({ gumana: false });
-    }
-  });
+		if (!profile_details) {
+			return res.status(404).send({ message: 'User not found' });
+		}
+
+		const profileDetailsResponse = {
+			gender: profile_details.gender,
+			phone_number: profile_details.phone_number,
+			dob: profile_details.dob,
+			address: profile_details.address,
+		};
+
+		res.status(200).json(profileDetailsResponse);
+	} catch (error) {
+		console.error('Error fetching profile details:', error);
+		res.status(500).send({ message: 'Error fetching profile details' });
+	}
 });
+
+
+let update = multer({
+	storage: multer.diskStorage({
+		destination: function(req, file, cb) {
+			cb(null, './uploads');
+		},
+		filename: function(req, file, cb) {
+			cb(null, `${Date.now()}_${file.originalname}`);
+		}
+	})
+});
+
+app.put('/api/update_profile_photo', update.single('file'), async (req, res) => {
+	let { email } = req.body
+	if (!req.file) {
+		return res.status(400).send({ message: 'No file uploaded' });
+	}
+	try {
+		const updatePhotoOfUser = await prisma.users.update({
+			where: {
+				user_email: email,
+			},
+			data: {
+				user_profile_photo_path: req.file.filename,
+			},
+		})
+		// Construct URL for the profile photo
+		const profilePhotoUrl = updatePhotoOfUser.user_profile_photo_path ? `http://localhost:9999/photos/${updatePhotoOfUser.user_profile_photo_path}`
+			: `http://localhost:9999/photos/default.jpg`;
+
+		console.log(req.body)
+		console.log(req.file);
+		console.log(updatePhotoOfUser)
+		res.status(200).send({
+			profile_photo: profilePhotoUrl
+		})
+	} catch (e) {
+		console.log(e)
+	}
+});
+
+
+
+
+
+
+
 
 app.listen(port, () => {
-  console.log(`Node.js is running on http://localhost:${port}`);
+	console.log(`Server running on port ${port}\n`);
 });
-

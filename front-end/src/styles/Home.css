@@ -1,42 +1,19 @@
-.pogi{
-width: 90px;
-height: 90px;
-background: url("../assets/logo.png");
-background-size: contain;
-background-repeat: no-repeat;
-background-position: center;
-margin-right: 500px;
-transition: all ease 0.3s;
-box-shadow: #171717;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+.nav-item {
+	color: white;
+	font-family: 'Poppins', sans-serif;
+	padding: 0 6px;
+	border-bottom: 3px solid #ffffff00;
+	transition: all ease-in-out 0.3s;
 }
-.pogi:hover{
-    filter: drop-shadow(0px 0px 10px  rgba(255, 255, 255, 0.8)); 
-}
-.main-container{
-    display: flex;
-    background: linear-gradient(90deg, #171717,#444444);
-    width: 100%;
-    justify-content: space-evenly;
-    align-items: center;
-    
-    
-}
-.item{
-    
-    padding: 10px;
-    color: white;
-    transition: all ease-in-out 0.3s;
-    font-family: 'Poppins';
-}
-.item:hover{
-    background-image: linear-gradient(90deg, #460645,#ff5450);
-    border-bottom: 5px linear-gradient(90deg, #460645,#243642);
-    -webkit-background-clip: text;
-  background-clip: text;         
-  color: transparent;
-}
-.content-container{
-    display: flex;
-    gap:90px
+
+.nav-item:hover {
+	/* background-image: linear-gradient(90deg, #460645, #ff5450); */
+	/* -webkit-background-clip: text; */
+	/* background-clip: text; */
+	/* color: transparent; */
+	border-bottom: 3px solid white;
 }

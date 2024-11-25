@@ -2,12 +2,11 @@
 import LoginOrSignin from './LoginOrSignin.jsx'
 function Entry() {
 
-  return (
-    <>
-
-      <LoginOrSignin />
-    </>
-  );
+	return (
+		<>
+			<LoginOrSignin />
+		</>
+	);
 }
 
 export default Entry;
