@@ -2,18 +2,27 @@ import React, { useState, useContext, useEffect } from 'react';
 import { contextKo } from './LoginComponent';
 import axios from 'axios'
 const ProfileWorker = () => {
+	console.clear()
 	const contextDataResponseFromLogin = useContext(contextKo);
-	console.log('context ito, log from ProfileWorker:', contextDataResponseFromLogin)
+	console.log('useContext in ProfileWorker:', contextDataResponseFromLogin)
 
 	let [fromResponseUpdateProfileData, setFromResponseUpdateProfileData] = useState(null)
 	console.log('bigay ni backend from udpate data: ', fromResponseUpdateProfileData)
 
 	// Initialize form data state
 	const [formData, setFormData] = useState({
+		aboutMe: '',  // Initialize About Me
 		gender: '',
 		phoneNumber: '',
 		dateOfBirth: '',
-		homeAddress: ''
+		homeAddress: '',
+	});
+	const [isEditing, setIsEditing] = useState({
+		gender: false,
+		phoneNumber: false,
+		dob: false,
+		address: false,
+		aboutMe: false,
 	});
 
 	const handleChange = (e) => {
@@ -33,6 +42,7 @@ const ProfileWorker = () => {
 			phoneNumber: formData.phoneNumber,
 			dob: formData.dateOfBirth,
 			address: formData.homeAddress,
+			aboutMe: formData.aboutMe
 		};
 
 		try {
@@ -52,6 +62,8 @@ const ProfileWorker = () => {
 
 
 	useEffect(() => {
+
+		console.log(setFormData)
 		const fetchProfileDetails = async () => {
 			try {
 				let response = await axios.get('http://localhost:9999/api/get_profile_details', {
@@ -145,99 +157,144 @@ const ProfileWorker = () => {
 				<div className="p-[30px] w-full bg-[#b8b7b8] rounded-[50px] ">
 					<div className='text-[1.3em] text-[#16202c]'>Email: <span className='font-black text-[1.2em] italic'>{contextDataResponseFromLogin.userEmail}</span></div>
 
-					{fromResponseUpdateProfileData == null && (<form id="formProfileWorker" onSubmit={handleSubmit}>
-						<div className='flex gap-[10px] mt-[1em] mb-[1em]'>
-							<label htmlFor="gender" className='text-[#16202c] '>Gender:</label>
-							<label>
+					{fromResponseUpdateProfileData == null && (
+						<form id="formProfileWorker" onSubmit={handleSubmit}>
+							{/* About me textarea */}
+							<div className='flex gap-[10px] mt-[1em] mb-[1em]'>
+								<div className='mb-[1em]'>
+									<label htmlFor="text-area">About me</label>
+									<textarea
+										id="text-area"
+										name="aboutMe" // Add a name for form tracking
+										value={formData.aboutMe} // Bind textarea to formData
+										onChange={handleChange} // Handle change for updating state
+										className="w-full p-2 border-b-2 border-[#16202c] focus:border-b-0 focus:outline-none"
+										placeholder="Write about yourself"
+									/>
+								</div>
+							</div>
+
+							{/* Gender selection */}
+							<div className='mb-[1em]'>
+								<label htmlFor="gender" className='text-[#16202c]'>Gender:</label>
+								<label>
+									<input
+										type="radio"
+										name="gender"
+										value="Male"
+										checked={formData.gender === 'Male'}
+										onChange={handleChange}
+										required
+									/>
+									<span className='text-[#16202c]'>Male</span>
+								</label>
+								<label>
+									<input
+										type="radio"
+										name="gender"
+										value="Female"
+										checked={formData.gender === 'Female'}
+										onChange={handleChange}
+										required
+									/>
+									<span className='text-[#16202c]'>Female</span>
+								</label>
+								<label>
+									<input
+										type="radio"
+										name="gender"
+										value="Other"
+										checked={formData.gender === 'Other'}
+										onChange={handleChange}
+										required
+									/>
+									<span className='text-[#16202c]'>Other</span>
+								</label>
+							</div>
+
+							{/* Phone Number */}
+							<div className='mb-[1em]'>
+								<label htmlFor="phoneNumber" className='text-[#16202c]'>Phone Number:</label>
 								<input
-									type="radio"
-									name="gender"
-									value="Male"
-									checked={formData.gender === 'Male'}
+									type="number"
+									id="phoneNumber"
+									name="phoneNumber"
+									placeholder="Enter phone number"
+									className="bg-transparent border-0 border-b-2 border-[#16202c] focus:border-[#16202c] focus:outline-none placeholder-[#16202c] text-[#16202c]"
+									value={formData.phoneNumber}
 									onChange={handleChange}
-									className='text-[white] '
 									required
 								/>
-								<span className='text-[#16202c]'>Male</span>
-							</label>
-							<label>
+							</div>
+
+							{/* Date of Birth */}
+							<div className='mb-[1em]'>
+								<label htmlFor="dateOfBirth" className='text-[#16202c]'>Date of Birth:</label>
 								<input
-									type="radio"
-									name="gender"
-									value="Female"
-									checked={formData.gender === 'Female'}
+									type="date"
+									id="dateOfBirth"
+									name="dateOfBirth"
+									value={formData.dateOfBirth}
+									className="bg-transparent border-0 border-b-2 border-[#16202c] focus:border-[#16202c] focus:outline-none placeholder-[#16202c] text-[#16202c]"
 									onChange={handleChange}
 									required
 								/>
-								<span className='text-[#16202c] '>Female</span>
-							</label>
-							<label>
+							</div>
+
+							{/* Home Address */}
+							<div className='mb-[1em]'>
+								<label htmlFor="homeAddress" className='text-[#16202c]'>Address:</label>
 								<input
-									type="radio"
-									name="gender"
-									value="Other"
-									checked={formData.gender === 'Other'}
+									type="text"
+									id="homeAddress"
+									name="homeAddress"
+									placeholder="Enter home address"
+									className="bg-transparent border-0 border-b-2 border-[#16202c] focus:border-[#16202c] focus:outline-none placeholder-[#16202c] text-[#16202c]"
+									value={formData.homeAddress}
 									onChange={handleChange}
 									required
 								/>
-								<span className='text-[#16202c]'>Other</span>
-							</label>
-						</div>
+							</div>
 
-						<div className='mb-[1em]'>
-							<label htmlFor="phoneNumber" className='text-[#16202c]'>Phone Number: </label>
-							<input
-								type="number"
-								id="phoneNumber"
-								name="phoneNumber"
-								placeholder="Enter phone number"
-								className="bg-transparent border-0 border-b-2 border-[#16202c] focus:border-[#16202c] focus:outline-none placeholder-[#16202c] text-[#16202c]"
-								value={formData.phoneNumber}
-								onChange={handleChange}
-								required
-							/>
-						</div>
-
-						<div className='mb-[1em]'>
-							<label htmlFor="dateOfBirth" className='text-[#16202c]'>Date of Birth: </label>
-							<input
-								type="date"
-								id="dateOfBirth"
-								name="dateOfBirth"
-								value={formData.dateOfBirth}
-								className="bg-transparent border-0 border-b-2 border-[#16202c] focus:border-[#16202c] focus:outline-none placeholder-[#16202c] text-[#16202c]"
-								onChange={handleChange}
-								required
-							/>
-						</div>
-
-						<div className='mb-[1em]'>
-							<label htmlFor="homeAddress" className='text-[#16202c]'>Address: </label>
-							<input
-								type="text"
-								id="homeAddress"
-								name="homeAddress"
-								placeholder="Enter home address"
-								className="bg-transparent border-0 border-b-2 border-[#16202c] focus:border-[#16202c] focus:outline-none placeholder-[#16202c] text-[#16202c]"
-								value={formData.homeAddress}
-								onChange={handleChange}
-								required
-							/>
-						</div>
-
-						<div>
-							<button type="submit" className='bg-[#16202c] text-[#e5e7eb] text-[1.2em] p-[20px] rounded-[20px]'>Submit</button>
-						</div>
-					</form>)}
+							{/* Submit Button */}
+							<div>
+								<button type="submit" className='bg-[#16202c] text-[#e5e7eb] text-[1.2em] p-[20px] rounded-[20px]'>
+									Submit
+								</button>
+							</div>
+						</form>
+					)}
 
 					{fromResponseUpdateProfileData != null && (
 						<div>
-							<div className='text-[1.3em] text-[#16202c]'>Gender: <span className='font-black text-[1.2em] italic'>{fromResponseUpdateProfileData.gender}</span> </div>
-							<div className='text-[1.3em] text-[#16202c]'>Number: <span className='font-black text-[1.2em] italic'>{fromResponseUpdateProfileData.phone_number}</span></div>
-							<div className='text-[1.3em] text-[#16202c]'>Data of Birth: <span className='font-black text-[1.2em] italic'>{fromResponseUpdateProfileData.dob}</span></div>
-							<div className='text-[1.3em] text-[#16202c]'>Address: <span className='font-black text-[1.2em] italic'>{fromResponseUpdateProfileData.address}</span></div>
+							<div className='text-[1.3em] text-[#16202c]'>
+								Gender:
+								<span className='font-black text-[1.2em] italic'>{fromResponseUpdateProfileData.gender}</span>
+								<span className='text-blue-700 cursor-pointer ml-2'>Update</span>
+							</div>
+							<div className='text-[1.3em] text-[#16202c]'>
+								Number:
+								<span className='font-black text-[1.2em] italic'>{fromResponseUpdateProfileData.phone_number}</span>
+								<span className='text-blue-700 cursor-pointer ml-2'>Update</span>
+							</div>
+							<div className='text-[1.3em] text-[#16202c]'>
+								Date of Birth:
+								<span className='font-black text-[1.2em] italic'>{fromResponseUpdateProfileData.dob}</span>
+								<span className='text-blue-700 cursor-pointer ml-2'>Update</span>
+							</div>
+							<div className='text-[1.3em] text-[#16202c]'>
+								Address:
+								<span className='font-black text-[1.2em] italic'>{fromResponseUpdateProfileData.address}</span>
+								<span className='text-blue-700 cursor-pointer ml-2'>Update</span>
+							</div>
+							<div className='text-[1.3em] text-[#16202c] mt-[1rem]'>
+								<div className='flex flex-row items-center gap-2'>
+									<div className='font-bold'>About Me</div>
+									<div className='text-blue-500 cursor-pointer'>Update</div>
+								</div>
+								<div className='p-[1rem] bg-[white]'>{fromResponseUpdateProfileData.about_me}</div>
+							</div>
 						</div>
-
 					)}
 				</div>
 

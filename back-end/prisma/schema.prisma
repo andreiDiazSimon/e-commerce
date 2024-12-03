@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,23 +7,40 @@ datasource db {
   url      = "mysql://root:password@localhost:3306/test"
 }
 
-
 model users {
-  user_id                Int      @id @default(autoincrement())
-  user_type              String
-  user_name              String
-  user_email             String   @unique
-  user_password          String
-  phone_number           String?  // Nullable field
-  dob                    DateTime? // Nullable field for date of birth
-  address                String?  // Nullable field for home address
-  gender                 Gender?  // Nullable enum field for gender
-  user_profile_photo_path String? // Nullable field for profile photo path
+  user_id                 Int       @id @default(autoincrement())
+  user_type               String
+  user_name               String
+  user_email              String    @unique
+  user_password           String
+  phone_number            String?   // Nullable field
+  dob                     DateTime? // Nullable field for date of birth
+  address                 String?   // Nullable field for home address
+  gender                  Gender?  // Nullable enum field for gender
+  user_profile_photo_path String?   // Nullable field for profile photo path
+  about_me                String?
+  
+  // Relations to messages
+  sentMessages            messages[] @relation("SentMessages")  // One-to-many relation to sent messages
+  receivedMessages        messages[] @relation("ReceivedMessages")  // One-to-many relation to received messages
 }
 
-// Enum for gender options
 enum Gender {
   Male
   Female
   Other
+}
+
+model messages {
+  message_id  Int       @id @default(autoincrement())
+  sender_id   Int
+  receiver_id Int
+  content     String
+  timestamp   DateTime  @default(now())
+
+  // Relating the sender to the user table
+  sender      users     @relation("SentMessages", fields: [sender_id], references: [user_id])
+  
+  // Relating the receiver to the user table
+  receiver    users     @relation("ReceivedMessages", fields: [receiver_id], references: [user_id])
 }

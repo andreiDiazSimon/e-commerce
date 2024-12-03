@@ -7,13 +7,13 @@ import ChooseAccountType from './ChooseAccountType'
 import Home from './Home'
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios'
-import { withEmotionCache } from '@emotion/react';
 
 
 
 export const contextKo = createContext();
 
 export function LoginComponent() {
+	console.clear()
 	const [passwordVisible, setPasswordVisible] = useState(false);
 	const [rememberMe, setRememberMe] = useState(false);
 	const [showHomePage, setShowHomePage] = useState(false);
@@ -53,7 +53,7 @@ export function LoginComponent() {
 			});
 			if (response.status === 200) {
 				console.log('log from LoginComponent: ', response.data);
-				setFromLoginResponse({ profilePhoto: response.data.profilePhoto, userType: response.data.accountType, userName: response.data.name, userEmail: response.data.email })
+				setFromLoginResponse({ userId: response.data.userId, profilePhoto: response.data.profilePhoto, userType: response.data.accountType, userName: response.data.name, userEmail: response.data.email })
 				console.log('log from response: ', fromLoginResponse);
 				setShowHomePage(true)
 			}
@@ -78,7 +78,7 @@ export function LoginComponent() {
 
 
 	return (
-		<contextKo.Provider value={fromLoginResponse}>
+		<contextKo.Provider value={fromLoginResponse} >
 
 			<>
 				{!showHomePage && !showChooseAccountTypeComponent ? (
@@ -198,7 +198,7 @@ export function LoginComponent() {
 					<ChooseAccountType />
 				) : <ChooseAccountType />}
 			</>
-		</contextKo.Provider>
+		</ contextKo.Provider >
 
 	);
 }

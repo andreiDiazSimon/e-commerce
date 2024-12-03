@@ -8,6 +8,7 @@ import Zeus from './Zeus';
 import { useState } from 'react';
 
 export default function ChooseAccountType() {
+	console.clear()
 	const [showThis, setShowThis] = useState('ito');
 	let [workerOrClient, setWorkerOrClient] = useState(null)
 	const handleLoginClick = () => {
