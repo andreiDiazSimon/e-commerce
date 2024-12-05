@@ -26,7 +26,7 @@ export default function MainWorker() {
 							onClick={() => setShowIto("home")}
 						>
 							HOME
-						</div>
+							</div>
 						<div
 							className="nav-item cursor-pointer"
 							onClick={() => setShowIto("browse")}

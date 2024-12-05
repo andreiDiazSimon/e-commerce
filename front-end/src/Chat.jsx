@@ -93,7 +93,7 @@ export default function Chat() {
 		<div className="bg-white w-full h-full p-4">
 			<div className="grid grid-cols-[20%_1fr] grid-rows-1 w-full h-[85vh]">
 				{/* First Column (contacts) */}
-				<div className="flex flex-col bg-gray-800 overflow-scroll">
+				<div className="flex flex-col bg-gradient-to-r from-white to-gray-300 h-screen overflow-scroll">
 					{contacts.map((contact) => (
 						<div
 							key={contact.user_id}
