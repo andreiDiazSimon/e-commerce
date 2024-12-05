@@ -127,6 +127,9 @@ app.get("/login", async (req, res) => {
 
 app.use("/photos", express.static("uploads"));
 
+
+
+
 app.put("/api/update-profile", async (req, res) => {
 	const { email, gender, phoneNumber, dob, address, aboutMe } = req.body;
 

@@ -120,20 +120,20 @@ const ProfileWorker = () => {
 
 
 	return (
-		<div className="profile-container flex w-full h-screen ">
+		<div className="profile-container flex w-full h-screen bg-[#393E46] p-[1rem] gap-[1rem]">
 			<input onChange={handleChangeSelectFile} type="file" name="file" id="ChangePhoto" className='hidden' />
-			<div className="w-full bg-[#16202c] p-[30px]">{/*BACKGROUND NA BLUEEEEE*/}
-				<div className='flex justify-center align-center gap-[30px] mb-[30px]'>
-					<div>
+			<div className="w-full bg-[#222831] p-[2rem] rounded-[2rem]">{/*BACKGROUND NA BLUEEEEE*/}
+				<div className='flex justify-start align-center gap-[30px] mb-[30px]'>
+					<div >
 						<img
-							className="rounded-[50%] w-[200px] h-[200px] object-cover object-center"
+							className="rounded-[50%] w-[150px] h-[150px] object-cover object-center"
 							src={stateSolelyForProfilePhoto}
 							alt="alternate"
 						/>
 						{
 							selectedPhotoForChangeProfilePhoto == null ? (
 								<div
-									className='transition-all text-[#b8b7b8] cursor-pointer mt-[10px] text-center italic font-mono hover:text-[white]'
+									className='transition-all text-[#b8b7b8] cursor-pointer mt-[10px] text-center italic font-[Poppins] hover:text-[white]'
 									onClick={handleSelectFileClick}
 								>
 									Change Photo
@@ -149,34 +149,35 @@ const ProfileWorker = () => {
 						}
 					</div>
 					<div className='flex flex-col justify-center align-center'>
-						<div className='leading-[0.9] text-[#b8b7b8] text-[50px] font-sans mb-[20px] font-black text-center'>{contextDataResponseFromLogin.userName}</div>
-						<div className=' text-[#b8b7b8] text-[15px] font-mono font-thin italic tracking-[10px] mb-[20px] text-center'>{contextDataResponseFromLogin.userType}</div>
+						<div className='border-b-[1px] pb-[1.5rem] leading-[0.9] text-[#b8b7b8] text-[45px] font-sans italic mb-[10px] font-black text-center'>{contextDataResponseFromLogin.userName}</div>
+						<div className=' text-[#b8b7b8] text-[15px] tracking-[30px]  text-center font-[Poppins]'>{contextDataResponseFromLogin.userType}</div>
 					</div>
 				</div>
 
-				<div className="p-[30px] w-full bg-[#b8b7b8] rounded-[50px] ">
-					<div className='text-[1.3em] text-[#16202c]'>Email: <span className='font-black text-[1.2em] italic'>{contextDataResponseFromLogin.userEmail}</span></div>
+				<div className="p-[30px] w-full h-auto bg-[#b8b7b8] rounded-[50px] ">
+					<div className='text-[1.3em] text-[#16202c]'><span className='text-[Black] font-[Poppins]' >Email: </span><span className='font-black text-[1.2em] italic '>{contextDataResponseFromLogin.userEmail}</span></div>
 
 					{fromResponseUpdateProfileData == null && (
 						<form id="formProfileWorker" onSubmit={handleSubmit}>
 							{/* About me textarea */}
-							<div className='flex gap-[10px] mt-[1em] mb-[1em]'>
+							<div className='flex gap-[10px] mt-[1em]  w-[70%]'>
 								<div className='mb-[1em]'>
-									<label htmlFor="text-area">About me</label>
+									<div className='text-[1.3em] text-[black] font-[Poppins]'>About me</div>
 									<textarea
+									cols="100"
 										id="text-area"
 										name="aboutMe" // Add a name for form tracking
 										value={formData.aboutMe} // Bind textarea to formData
 										onChange={handleChange} // Handle change for updating state
-										className="w-full p-2 border-b-2 border-[#16202c] focus:border-b-0 focus:outline-none"
+										className="w-full  p-2 border-b-2 border-[#16202c] focus:border-b-0 focus:outline-none rounded-t-lg"
 										placeholder="Write about yourself"
 									/>
 								</div>
 							</div>
 
 							{/* Gender selection */}
-							<div className='mb-[1em]'>
-								<label htmlFor="gender" className='text-[#16202c]'>Gender:</label>
+							<div className='mb-[1em] flex gap-[1rem]'>
+								<label htmlFor="gender" className='text-[#16202c] font-[Poppins] italic'>Gender:</label>
 								<label>
 									<input
 										type="radio"
@@ -186,7 +187,7 @@ const ProfileWorker = () => {
 										onChange={handleChange}
 										required
 									/>
-									<span className='text-[#16202c]'>Male</span>
+									<span className='text-[#16202c] font-[Poppins]'>Male</span>
 								</label>
 								<label>
 									<input
@@ -197,7 +198,7 @@ const ProfileWorker = () => {
 										onChange={handleChange}
 										required
 									/>
-									<span className='text-[#16202c]'>Female</span>
+									<span className='text-[#16202c] font-[Poppins]'>Female</span>
 								</label>
 								<label>
 									<input
@@ -208,13 +209,13 @@ const ProfileWorker = () => {
 										onChange={handleChange}
 										required
 									/>
-									<span className='text-[#16202c]'>Other</span>
+									<span className='text-[#16202c] font-[Poppins]'>Other</span>
 								</label>
 							</div>
 
 							{/* Phone Number */}
-							<div className='mb-[1em]'>
-								<label htmlFor="phoneNumber" className='text-[#16202c]'>Phone Number:</label>
+							<div className='mb-[1em] flex gap-[1rem]'>
+								<label htmlFor="phoneNumber" className='text-[#16202c] font-[Poppins]  '>Phone Number:</label>
 								<input
 									type="number"
 									id="phoneNumber"
@@ -228,8 +229,8 @@ const ProfileWorker = () => {
 							</div>
 
 							{/* Date of Birth */}
-							<div className='mb-[1em]'>
-								<label htmlFor="dateOfBirth" className='text-[#16202c]'>Date of Birth:</label>
+							<div className='mb-[1em] flex gap-[1rem]'>
+								<label htmlFor="dateOfBirth" className='text-[#16202c] font-[Poppins]'>Date of Birth:</label>
 								<input
 									type="date"
 									id="dateOfBirth"
@@ -242,8 +243,8 @@ const ProfileWorker = () => {
 							</div>
 
 							{/* Home Address */}
-							<div className='mb-[1em]'>
-								<label htmlFor="homeAddress" className='text-[#16202c]'>Address:</label>
+							<div className='mb-[1em] flex gap-[1rem]'>
+								<label htmlFor="homeAddress" className='text-[#16202c] font-[Poppins]'>Address:</label>
 								<input
 									type="text"
 									id="homeAddress"
@@ -258,7 +259,7 @@ const ProfileWorker = () => {
 
 							{/* Submit Button */}
 							<div>
-								<button type="submit" className='bg-[#16202c] text-[#e5e7eb] text-[1.2em] p-[20px] rounded-[20px]'>
+								<button type="submit" className='bg-[#16202c] text-[#e5e7eb] text-[1.2em] py-[1rem] px-[2rem] rounded-[20px]'>
 									Submit
 								</button>
 							</div>
@@ -267,7 +268,7 @@ const ProfileWorker = () => {
 
 					{fromResponseUpdateProfileData != null && (
 						<div>
-							<div className='text-[1.3em] text-[#16202c]'>
+							<div className='text-[1.3em] text-[#16202c] '>
 								Gender:
 								<span className='font-black text-[1.2em] italic'>{fromResponseUpdateProfileData.gender}</span>
 								<span className='text-blue-700 cursor-pointer ml-2'>Update</span>
@@ -300,9 +301,16 @@ const ProfileWorker = () => {
 
 			</div>
 
-			<div className="w-full bg-[#b8b7b8]">{/*BACKGROUND NA GRAYYYY*/}
+			<div className="w-full bg-[#222831] p-[1rem] rounded-[2rem] " >{/*BACKGROUND NA GRAYYYY*/}
 
-				<h1 className="text-white text-center p-4">gray Section</h1>
+				<h1 className="text-white text-center p-4">1 REVIEW (4.9)</h1>
+				<div className='w-full bg-[white] text-[#1E201E] p-[1rem] rounded-[30px] shadow-xl'>
+					<div className=''>
+						<img src="" alt="" className='' />
+						<div className=''>Joshua Paco</div>
+					</div>
+					<div className=''>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quos cupiditate quia nemo ipsa officia nam ut sint tempore incidunt consequatur.</div>
+				</div>
 			</div>
 		</div>
 	);

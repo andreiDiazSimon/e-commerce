@@ -55,12 +55,12 @@ export default function Browse() {
 	}, [currentUserId]);
 
 	return (
-		<div className="bg-[#ffffff] w-[100%] h-[100vh]">
+		<div className=" bg-gradient-to-r from-[#000000bf] w-[100%] h-[100vh]">
 			<div className="flex flex-wrap">
 				{workerAccounts.map((current, index) => (
 					<div
 						key={index}
-						className="rounded-lg bg-[#171717] text-[#eaeaea] w-[250px] h-[250px] flex flex-col justify-center items-center m-[0.5rem] p-[1rem]"
+						className="rounded-lg bg-[#0000002e] text-[#eaeaea] w-[250px] h-[250px] flex flex-col justify-center items-center m-[0.5rem]"
 					>
 						<img
 							className="border rounded-full object-cover object-center w-[50%] h-[50%] overflow-hidden"
@@ -70,7 +70,7 @@ export default function Browse() {
 						<div className="text-[1rem] font-bold">{current.user_name}</div>
 						<div className="font-thin">{current.address}</div>
 						<input
-							className="bg-[#eaeaea] p-[0.3rem] rounded-lg text-[black] cursor-pointer"
+							className=" text-gray-900 bg-gray-100 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 me-2 mb-2 cursor-pointer"
 							type="button"
 							value="View Profile"
 							onClick={() => handleViewProfile(current)}
